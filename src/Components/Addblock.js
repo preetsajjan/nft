@@ -6,24 +6,27 @@ function BasicExample() {
 
     const [user, setUser] = useState({
         data: "",
-        id:"",
+        
         price: ""
     })
     console.log(user)
 
-    const getdata = (e) => {
+    const getdata = async (e) => {
 
         const { value, name } = e.target;
+            const index = await localStorage.getItem("id")
         setUser({
 
             ...user,
-            [name]: value
+            [name]: value, ['id']:index
 
         })
+        console.log(user)
 
     }
-    const handleClick=(e)=>{
+    const handleClick = async (e)=>{
         e.preventDefault();
+       
         const { data,id, price } = user;
         if (!data) {
             alert(" name required")
@@ -34,8 +37,9 @@ function BasicExample() {
             alert("password required and length should be greater than 5")
 
         } else {
-             axios.post('http://127.0.0.1:8000/addblock', user).then(succ => {
-                alert("Your id: " + succ.data['Public Id'])
+            await axios.post('http://127.0.0.1:8000/addblock', user).then(succ => {
+                alert("block added succesfully")
+                // window.location.reload()
                 // localStorage.setItem("xxx",JSON.stringify([...data,succ.data]))
                 // console.log(data)
             }).catch(err => {
@@ -56,10 +60,10 @@ function BasicExample() {
       <input class="form-control" type="text" placeholder="Enter Shayari" name="data" onChange={getdata}/>
 
     </div> 
-    <div className='mb-3 col-lg-6 '>
+    {/* <div className='mb-3 col-lg-6 '>
     <input class="form-control" type="number" placeholder="Enter id" name="id" onChange={getdata}/>
 
-    </div>
+    </div> */}
     <div className='mb-3 col-lg-6 '>
     <input class="form-control" type="number" placeholder="Enter price" name="price" onChange={getdata}/>
 

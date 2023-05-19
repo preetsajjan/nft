@@ -6,7 +6,7 @@ const Notvalidated = () => {
     const [user,setUser] = useState([]);
 
     const getData = async ()=>{
-        const response = await fetch('http://127.0.0.1:8000/notvalidated')
+        const response = await fetch('http://127.0.0.1:8000/alltransactions')
         
         setUser(await response.json());
     } 
@@ -17,21 +17,33 @@ const Notvalidated = () => {
 
   return (
     <>
-    <div>
-      <h1>View Not validated NFT's</h1>
+    <div class="text-center mt-5">
+      <h1>View All Transactions</h1>
     </div>
     <div>
     {
             user.map((curElem) => {
                 return (
-                    <>
-                    <h2>{curElem.index}</h2>
-                    <h3>{ curElem.data }</h3>
-                    <h5>{curElem.price}</h5>
-                    <h4>{curElem.hash}</h4>
-                    <h4>{curElem.prev_hash}</h4>
+                <center>
+                     <>
+                                <div class="container">
+                                    <div class="col-6">
+                                        <div class="card mt-5">
+                                            <h5 class="card-header">NFT</h5>
+                                            <div class="card-body">
+                                                <h5 class="card-title">Data: {curElem.data}</h5>
+                                                <p class="card-text">Price: {curElem.price}</p>
+                                                <p class="card-text">IsValidate: {curElem.isValidate}</p>
 
-                    </>
+                                                <footer class="blockquote-footer">Public_Id: {curElem.public_id}</footer>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                </>
+                </center>
                 )
             })
         }

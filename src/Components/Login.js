@@ -49,13 +49,16 @@ function BasicExample() {
             await axios.post('http://127.0.0.1:8000/login',user).then(async(succ) => {
                 // alert("Your id: " + succ.data['Public Id'])
 
-                    if(succ.data===user.password && user.password==="preeti"){
+                    if(succ.data===user.password && user.password==="admin" && succ.id ===0){
                         
                         navigate(`/admin`)
+                        await localStorage.setItem("id",user.id)
                     }
                     else if(succ.data===user.password){
                         await localStorage.setItem("id",succ.data.public_id)
                         navigate(`/home`)
+                        await localStorage.setItem("id",user.id)
+
                     }
                 // localStorage.setItem("xxx",JSON.stringify([...data,succ.data]))
                 // console.log(data)

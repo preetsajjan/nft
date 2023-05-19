@@ -91,16 +91,28 @@ async def login(login: Login):
     else:
         return "This public ID does not exist"
     
-@app.get('/mynft/{public_id}')
-async def root(public_id:int,mynft:Mynft):
-    allBlocks = os.listdir(r"c:\blockchain\Blockchain")
-    myAsset = []
-    print(allBlocks)
-    for fileName in allBlocks:
-        block = json.load(open(r'c:\blockchain\Blockchain\{}'.format(fileName)))
-        if str(block['public_id']) == str(mynft.public_id):
-            myAsset.append(block)
-    return myAsset
+
+@app.get('/mynft')
+async def root():
+    allBlocks = os.listdir(r'c:\blockchain\Blockchain')
+    validatedNft = []
+    for fileAdd in allBlocks:
+        block = json.load(open(r'c:\blockchain\Blockchain\{}'.format(fileAdd), "r"))
+        
+        validatedNft.append(block)
+    return validatedNft
+
+
+# @app.get('/mynft/[public_id]')
+# async def root(public_id:int):
+#     allBlocks = os.listdir(r"c:\blockchain\Blockchain")
+#     myAsset = []
+#     print(allBlocks)
+#     for fileName in allBlocks:
+#         block = json.load(open(r'c:\blockchain\Blockchain\{}'.format(fileName)))
+#         # if str(block['public_id']) == str(mynft.public_id):
+#         myAsset.append(block)
+#     return (myAsset)
 
 def hashGenerator( data):
     result = hashlib.sha256(data.encode())
@@ -116,7 +128,7 @@ def createBlock( b_id, data, hash, prev_hash, id, price):
     singleBlock['prev_hash'] = prev_hash
     singleBlock['public_id'] = id
     singleBlock['price'] = price
-    singleBlock['isValidate'] = False
+    singleBlock['isValidate'] = "False"
     return singleBlock
 
 @app.post('/addblock')
@@ -162,7 +174,7 @@ async def root():
     validatedNft = []
     for fileAdd in allBlocks:
         block = json.load(open(r'c:\blockchain\Blockchain\{}'.format(fileAdd), "r"))
-        if block['isValidate'] == True:
+        if block['isValidate'] == "True":
             validatedNft.append(block)
     return validatedNft
 
@@ -174,7 +186,7 @@ async def root(validatenft:Validatenft):
         block = json.load(open(r'c:\blockchain\Blockchain\{}'.format(fileAdd), "r"))
         if str(block['index']) == validatenft.index:
             file = block
-    file['isValidate'] = True
+    file['isValidate'] = "True"
     addValidatedBlock(file)
 
 def addValidatedBlock (obj):
@@ -185,7 +197,7 @@ def addValidatedBlock (obj):
         if block['index'] == len(allBlocks) - 1:
             lastBlock.append(block)
     newBlock = createBlock(obj['index'],obj['data'], hashGenerator(obj['data']+str(len(allBlocks))), lastBlock[0]['hash'], str(obj['public_id']), obj['price'])
-    newBlock['isValidate'] = True
+    newBlock['isValidate'] = "True"
     json.dump(newBlock, open(r'c:\blockchain\Blockchain\{}.txt'.format(
     newBlock['hash']), 'w'))
     src = r'c:\blockchain\Blockchain'
@@ -210,8 +222,19 @@ async def root():
 async def root():
     notValidate =os.listdir(r'c:\blockchain\Blockchain')
     allnotValidated =[]
+    notValidatedArray = []
     for fileName in notValidate:
         block = json.load(open(r'c:\blockchain\Blockchain\{}'.format(fileName)))
-        if block['index'] == block['block_id']:
+        if block['block_id'] not in notValidatedArray:
+            notValidatedArray.append(block['block_id'])
             allnotValidated.append(block)
-    return allnotValidated
+        else:
+            del allnotValidated[block["index"]]
+    return notValidatedArray
+
+
+
+
+        # print(block)
+        # if block['index'] == block['block_id']:
+    # return allnotValidated

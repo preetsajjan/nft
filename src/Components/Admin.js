@@ -18,20 +18,23 @@ const handleClick3 = async ()=>{
 }
 
   return (
-    <div className='container'>
+    <center>
+         <div className='container'>
         <h1>Admin Page</h1>
         <div className="mb-3 col-lg-6 mt-5">
-                <button onClick={handleClick}>Validate NFT</button>
+                <button class="btn btn-primary" onClick={handleClick}>   Validate NFT</button>
         </div>
         <div className="mb-3 col-lg-6 mt-5">
-                <button   onClick={handleClick2} >VIEW Not validated NFT's</button>
+                <button  class="btn btn-primary" onClick={handleClick2} >View alltransactions</button>
         </div>
         <div className="mb-3 col-lg-6 mt-5">
-                <button  onClick={handleClick3} >View all NFT</button>
+                <button class="btn btn-primary" onClick={handleClick3} >View all NFT</button>
         </div>
 
           
     </div>
+    </center>
+   
   )
 }
 
